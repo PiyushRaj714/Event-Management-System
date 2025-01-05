@@ -58,7 +58,7 @@ Welcome to **Event Garden**, a 🌐 web-based event management system built usin
 
 2. 🗂️ Navigate to the project directory:
    ```bash
-   cd event-management-flask
+   cd Event-Management-System
    ```
 
 3. Set up a 📦 virtual environment:
@@ -88,20 +88,6 @@ Welcome to **Event Garden**, a 🌐 web-based event management system built usin
 
 8. Access the 🖥️ application in your 🌐 browser:
    - Development: `http://127.0.0.1:5000`
-
----
-
-## 🗂️ Project Structure
-```
-project/
-|-- static/         # 📁 Static files (🖌️ CSS, ⚙️ JavaScript, 🖼️ images)
-|-- templates/      # 📄 HTML templates
-|-- app.py          # 🖥️ Application entry point
-|-- models.py       # 🛢️ Database models
-|-- routes.py       # 🔗 Application routes
-|-- config.py       # ⚙️ Configuration file
-|-- requirements.txt # 📜 Dependencies
-```
 
 ---
 

@@ -1,0 +1,321 @@
+from flask import Flask, render_template, request, redirect, url_for, session
+import mysql.connector
+from flask import Flask, render_template, request, redirect, url_for, flash
+from flask_mail import Mail, Message
+from datetime import datetime
+
+app = Flask(__name__)
+
+app.secret_key = 'your_secret_key'  # Set a secret key for session management
+
+
+# Function to connect to the database
+def get_db_connection():
+    connection = mysql.connector.connect(
+        host='localhost',
+        database='event_Project',
+        user='root',  # Update with your MySQL username
+        password='root123'  # Update with your MySQL password
+    )
+    return connection
+
+
+# Configure Flask-Mail
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USERNAME'] = 'nnm22cs007@nmamit.in'  # Replace with your email
+app.config['MAIL_PASSWORD'] = 'abhishashideepa@4'  # Replace with your email password
+app.config['MAIL_DEFAULT_SENDER'] = 'nnm22cs007@nmamit.in'  # Default sender email
+
+mail = Mail(app)
+
+
+# Route for the signup page
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    if request.method == 'POST':
+        # Get user input from the form, using .get to handle missing keys
+        username = request.form.get('username')
+        password = request.form.get('password')
+        role = request.form.get('role', 'user')  # Default to 'user' if role is not provided
+        email = request.form.get('email')
+
+        # Check if all required fields are filled
+        if not username or not password or not email:
+            return "All fields are required!", 400  # Return an error if fields are missing
+
+        # Connect to the database and insert data
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        try:
+            # Insert username, password, role, and email into the database
+            cursor.execute(
+                "INSERT INTO users (username, password, role, email) VALUES (%s, %s, %s, %s)",
+                (username, password, role, email)
+            )
+            connection.commit()
+            print(f"User {username} signed up successfully!")
+        except mysql.connector.Error as err:
+            print(f"Error: {err}")
+            connection.rollback()
+        finally:
+            cursor.close()
+            connection.close()
+
+        return redirect(url_for('login'))  # Redirect to login page after signup
+
+    return render_template('signup.html')
+
+
+
+
+# Route for the login page
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute("SELECT * FROM users WHERE username = %s AND password = %s", (username, password))
+        user = cursor.fetchone()
+
+        cursor.close()
+        connection.close()
+
+        if user:
+            role = user[3]  # Assuming role is the fourth column in the 'users' table
+
+            # Store the username and role in the session
+            session['username'] = username
+            session['role'] = role
+
+            if role == 'admin':
+                return redirect(url_for('admin_dashboard'))
+            else:
+                return redirect(url_for('home'))
+
+        else:
+            return "Invalid credentials!"
+
+    return render_template('login.html')
+
+
+# Route for the home page for regular users
+@app.route('/home')
+def home():
+    # Check if the user is logged in
+    if 'username' in session:
+        # Connect to the database and fetch events
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Query to get events (adjust column names if necessary)
+        cursor.execute("SELECT name, date, venue FROM events")
+        events = cursor.fetchall()  # Fetch all events
+
+        print(events)  # Debugging: Check if events are fetched properly
+
+        cursor.close()
+        connection.close()
+
+        # Render home page with events passed to the template
+        return render_template('home.html', username=session['username'], events=events)
+    else:
+        return redirect(url_for('login'))
+
+
+# Route for registering for an event
+@app.route('/register_event/<int:event_id>', methods=['GET', 'POST'])
+def register_event(event_id):
+    # Connect to the database to fetch event details
+    connection = get_db_connection()
+    cursor = connection.cursor()
+
+    # Get event details by ID (assuming event_id exists in the database)
+    cursor.execute("SELECT name, date, venue, price FROM events WHERE id = %s", (event_id,))
+    event = cursor.fetchone()
+
+    if not event:
+        return "Event not found!"
+
+    if request.method == 'POST':
+        # Get the number of tickets and payment details
+        tickets = request.form['tickets']
+        payment_method = request.form['payment_method']
+
+        # Assuming the price is in the fourth column of the event
+        total_amount = event[3] * int(tickets)
+
+        # Store the registration (This would require a registration table in the database)
+        cursor.execute(
+            "INSERT INTO registrations (event_id, username, tickets, total_amount, payment_method) VALUES (%s, %s, %s, %s, %s)",
+            (event_id, session['username'], tickets, total_amount, payment_method))
+        connection.commit()
+
+        # Redirect to confirmation page or homepage after successful registration
+        return redirect(url_for('home'))
+
+    cursor.close()
+    connection.close()
+
+    return render_template('register_event.html', event=event)
+
+
+# Route for booking event
+@app.route('/book_event/<int:event_id>', methods=['GET', 'POST'])
+def book_event(event_id):
+    # Fetch the event details based on event_id
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM events WHERE id = %s", (event_id,))
+    event = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if not event:
+        return "Event not found!", 404
+
+    if request.method == 'POST':
+        # Get user input (number of tickets, payment method)
+        tickets = int(request.form['tickets'])
+        total_amount = event['price'] * tickets  # Assuming 'price' is fetched from the event
+        payment_method = request.form['payment_method']  # e.g., 'Credit Card', 'PayPal'
+
+        # Save registration to the database
+        connection = get_db_connection()
+        cursor = connection.cursor()
+        cursor.execute(
+            "INSERT INTO registrations (event_id, username, tickets, total_amount, payment_method) VALUES (%s, %s, %s, %s, %s)",
+            (event_id, session['username'], tickets, total_amount, payment_method))
+        connection.commit()
+        cursor.close()
+        connection.close()
+
+        # Redirect to a confirmation page after booking
+        return redirect(url_for('booking_confirmation', event_id=event_id))
+
+    return render_template('book_event.html', event=event)
+
+
+@app.route('/booking_confirmation/<int:event_id>')
+def booking_confirmation(event_id):
+    connection = get_db_connection()
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM registrations WHERE event_id = %s AND username = %s", (event_id, session['username']))
+    registration = cursor.fetchone()
+    cursor.close()
+    connection.close()
+
+    if not registration:
+        return "Booking not found!", 404
+
+    return render_template('booking_confirmation.html', registration=registration)
+
+
+@app.route('/admin_dashboard')
+def admin_dashboard():
+    if 'username' in session and session['role'] == 'admin':
+        connection = get_db_connection()
+        cursor = connection.cursor()
+
+        # Query to get registered events along with event details
+        cursor.execute("""
+             SELECT r.id, r.username, r.tickets, r.total_amount, r.payment_method, u.email, e.name, e.date, e.venue
+    FROM registrations r
+    JOIN users u ON r.id = u.id
+    JOIN events e ON r.event_id = e.id
+        """)
+        registrations = cursor.fetchall()
+
+        cursor.close()
+        connection.close()
+
+        return render_template('admin_dashboard.html', registrations=registrations)
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/add_event', methods=['GET', 'POST'])
+def add_event():
+    if 'username' in session and session['role'] == 'admin':
+        if request.method == 'POST':
+            # Get data from the form
+            name = request.form['name']
+            date = request.form['date']
+            venue = request.form['venue']
+            price = request.form['price']
+
+            # Insert the new event into the database
+            connection = get_db_connection()
+            cursor = connection.cursor()
+            cursor.execute("""
+                INSERT INTO events (name, date, venue, price)
+                VALUES (%s, %s, %s, %s)
+            """, (name, date, venue, price))
+            connection.commit()
+
+            cursor.close()
+            connection.close()
+
+            return redirect(url_for('admin_dashboard'))  # Redirect back to the admin dashboard
+
+        return render_template('add_event.html')
+    else:
+        return redirect(url_for('login'))
+
+
+@app.route('/logout')
+def logout():
+    # Remove the user from the session
+    session.pop('username', None)
+    session.pop('role', None)
+    return redirect(url_for('login'))
+
+
+
+@app.route('/send_email', methods=['GET', 'POST'])
+@app.route('/send_email', methods=['GET', 'POST'])
+def send_email():
+    if request.method == 'POST':
+        user_email = request.form['user_email']
+        subject = request.form['subject']
+        body = request.form['body']
+        send_date = request.form['send_date']
+        send_time = request.form['send_time']
+
+        send_datetime_str = f"{send_date} {send_time}"
+        send_datetime = datetime.strptime(send_datetime_str, "%Y-%m-%d %H:%M")
+
+        formatted_datetime = send_datetime.strftime("%A, %B %d, %Y at %I:%M %p")
+
+
+        body_with_datetime = f"{body}\n\nAppointment is scheduled to discuss further in person on: {formatted_datetime}"
+
+        msg = Message(subject=subject,
+                      recipients=[user_email],
+                      body=body_with_datetime)
+
+        try:
+            mail.send(msg)
+            flash('Email sent successfully!', 'success')
+        except Exception as e:
+            flash(f'Error sending email: {str(e)}', 'danger')
+
+        return redirect(url_for('admin_dashboard'))
+
+    return render_template('set_appointment.html')
+
+@app.route('/set_appointment')
+def set_appointment():
+    # Retrieve the email from the URL query parameter
+    user_email = request.args.get('email')
+    return render_template('set_appointment.html', user_email=user_email)
+
+
+if __name__ == '__main__':
+    app.run(debug=True)

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #f7f9fc, #e0efff); /* Light pastel gradient */
+            color: #555;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        /* Header Styling */
+        .header {
+            background: linear-gradient(135deg, #a0d8ff, #e0efff); /* Light blue gradient */
+            color: #333;
+            padding: 40px;
+            text-align: center;
+            border-bottom: 3px solid #ffb8d0; /* Soft pink border */
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+            font-family: 'Dancing Script', cursive; /* Elegant script font */
+            font-weight: 600;
+            color: #333;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            margin-top: 10px;
+            font-weight: 300;
+            color: #777;
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            padding: 50px;
+            flex-wrap: wrap;
+        }
+
+        /* Card Styling */
+        .card {
+            width: 320px;
+            background: #fff; /* Pure white */
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+            background: linear-gradient(135deg, #a0d8ff, #e0efff); /* Light blue gradient */
+        }
+
+        .card h2 {
+            font-size: 1.8rem;
+            color: #ff7bc4; /* Soft pinkish color */
+            margin-bottom: 15px;
+            font-weight: 600;
+            font-family: 'Dancing Script', cursive; /* Elegant script font for headings */
+        }
+
+        .card p {
+            font-size: 1.1rem;
+            color: #777;
+            margin-bottom: 25px;
+            font-weight: 300;
+        }
+
+        .card a {
+            display: inline-block;
+            text-decoration: none;
+            background-color: #ffb8d0; /* Soft pink */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 30px;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+
+        .card a:hover {
+            background-color: #ff7bc4; /* Darker pink */
+        }
+
+        /* Footer Styling */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background-color: #f0f4f8; /* Light greyish background */
+            color: #555;
+            margin-top: 50px;
+            font-size: 1rem;
+            font-weight: 300;
+        }
+
+        .footer p {
+            margin: 0;
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            .dashboard {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .card {
+                width: 90%;
+            }
+        }
+
+        /* Back Button Styling */
+        .back-btn {
+            display: inline-block;
+            background-color: #e74c3c; /* Red color for logout */
+            color: white;
+            padding: 12px 25px;
+            border-radius: 5px;
+            font-size: 16px;
+            text-decoration: none;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add depth with shadow */
+        }
+
+        /* Hover Effect for Back Button */
+        .back-btn:hover {
+            background-color: #c0392b; /* Darker red on hover */
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for hover effect */
+            transform: translateY(-3px); /* Slight lift effect */
+        }
+
+        /* Active Effect */
+        .back-btn:active {
+            background-color: #a93226; /* Even darker red when clicked */
+            transform: translateY(0); /* Reset to normal position */
+        }
+
+        /* Centering the Button */
+        .center-button-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 20px 0; /* Compact vertical spacing */
+        }
+
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>ADMIN DASHBOARD</h1>
+        <p>Manage registered users and events</p>
+    </div>
+
+    <!-- Dashboard Cards -->
+    <div class="dashboard">
+        <!-- View Registered Users Card -->
+        <div class="card">
+            <h2>View Registered Users</h2>
+            <p>See the list of all registered users</p>
+            <a href="{{url_for('admin_dashboard')}}" >View Users</a>
+        </div>
+
+        <!-- View Events Card -->
+<!--        <div class="card">-->
+<!--            <h2>View Events</h2>-->
+<!--            <p>See the events users have registered for</p>-->
+<!--            <a href="" >View Events</a>-->
+<!--        </div>-->
+
+        <!-- Manage Users Card -->
+        <div class="card">
+            <h2>Add events</h2>
+            <p>You can add events</p>
+            <a href="{{ url_for('add_event') }}" class="add-event-btn">Add New Event</a>
+        </div>
+        <div class="card">
+            <h2>Add Venues</h2>
+            <p>You can add events</p>
+            <a href="{{ url_for('add_venue') }}" class="add-event-btn">Add New Venue</a>
+        </div>
+
+        <!-- Manage Events Card -->
+<!--        <div class="card">-->
+<!--            <h2>Remove Events</h2>-->
+<!--            <p> you can remove events</p>-->
+<!--            <a href="#" >remove Events</a>-->
+<!--        </div>-->
+
+    </div>
+
+    <div class="center-button-container">
+        <a href="{{url_for('login')}}" class="back-btn">Logout</a>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <p>&copy; 2024 Event Management System. All Rights Reserved.</p>
+    </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+/* General Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f4f4f9;
+    color: #333;
+    font-size: 16px;
+}
+
+.container {
+    width: 80%;
+    margin: 0 auto;
+}
+
+header {
+    background-color: #005a8d;
+    color: white;
+    padding: 20px;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5em;
+}
+
+nav a {
+    color: white;
+    text-decoration: none;
+    background-color: #ff6600;
+    padding: 10px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+}
+
+nav a:hover {
+    background-color: #ff8533;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+/* Table Styling */
+.notifications-section {
+    margin-top: 30px;
+}
+
+.notifications-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: white;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.notifications-table th, .notifications-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.notifications-table th {
+    background-color: #007bb5;
+    color: white;
+}
+
+.notifications-table tr:hover {
+    background-color: #f1f1f1;
+}
+
+.notifications-table td {
+    font-size: 14px;
+}
+
+/* Notification Form Styling */
+.notification-form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.notification-form label {
+    display: block;
+    font-weight: bold;
+    margin: 10px 0 5px;
+}
+
+.notification-form textarea, .notification-form select {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.notification-form button {
+    padding: 12px 20px;
+    background-color: #005a8d;
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.notification-form button:hover {
+    background-color: #007bb5;
+}

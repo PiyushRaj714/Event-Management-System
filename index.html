@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Management - BookMyShow Style</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to bottom, #cde7f9, #f9f9f9);
+            color: #333;
+        }
+
+        /* Navbar */
+        nav {
+            background-color: #cadeff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav ul li {
+            margin: 0 15px;
+        }
+
+        nav ul li a {
+            color: #555;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: 500;
+        }
+
+        nav ul li a:hover {
+            color: #007bff;
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(to bottom, #cde7f9, #f9f9f9);
+            padding: 20px;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            color: #222;
+            font-weight: bold;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: #444;
+            margin-top: 10px;
+        }
+
+        .hero .search-bar {
+            display: flex;
+            width: 80%;
+            max-width: 600px;
+            margin-top: 20px;
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .hero input {
+            flex: 1;
+            padding: 10px 15px;
+            border: none;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .hero button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        .hero button:hover {
+            background-color: #0056b3;
+        }
+
+        .section-title {
+            text-align: center;
+            margin: 40px 0 20px;
+            font-size: 28px;
+            color: #333;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 0 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 6px 5px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card img {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+        }
+
+        .card-content {
+            padding: 15px;
+        }
+
+        .card-title {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #222;
+            font-weight: bold;
+        }
+
+        .card-text {
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .card button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .card button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(to bottom, #e5dcfe, #9a8afc);
+            color: #555;
+            text-align: center;
+            padding: 15px 0;
+            margin-top: 30px;
+            box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        #contact {
+            margin-top: 30px;
+            padding: 40px 20px;
+            background: linear-gradient(to bottom, #cde7f9, #f9f9f9);
+            color: #333;
+            box-shadow: 0 8px 5px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        .contact-details {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .contact-details ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .contact-details li {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        .contact-details a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        .contact-details a:hover {
+            text-decoration: underline;
+        }
+
+        .contact-form {
+            width: 80%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .contact-form input, .contact-form textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .contact-form button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .contact-form button:hover {
+            background-color: #0056b3;
+        }
+
+        .slider {
+            position: relative;
+            width: 100%;
+            height: 70vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .slider img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 0.8s ease-in-out;
+            z-index: 0;
+        }
+
+        .slider img.active {
+            opacity: 1;
+            z-index: 1;
+        }
+
+        .slider-nav {
+            position: absolute;
+            width: 100%;
+            bottom: 15px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .slider-nav button {
+            width: 12px;
+            height: 12px;
+            background-color: #dcdcdc;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .slider-nav button:hover,
+        .slider-nav button.active {
+            background-color: #f14e7e;
+        }
+
+        .slider-nav button:focus {
+            outline: none;
+        }
+
+        .slider .slider-overlay-1 {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #444;
+            text-align: center;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 15px 30px;
+            border-radius: 5px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .slider .slider-overlay-1 h1 {
+            font-size: 28px;
+            font-family: 'Georgia', serif;
+            color: #333;
+            margin: 0;
+            padding: auto;
+        }
+
+        .slider .slider-overlay-1 p {
+            font-size: 16px;
+            color: #555;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<header style="display: flex; align-items: center; justify-content: space-between; padding: 10px 20px; background: linear-gradient(to right, #cde7f9, #e5dcfe); box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+    <!-- Navigation bar -->
+    <nav style="flex: 1;">
+        <ul style="display: flex; list-style: none; margin: 0; padding: 0; gap: 15px;">
+            <li><a href="#hero" style="text-decoration: none; color: #333; font-weight: bold;">Home</a></li>
+            <li><a href="#events" style="text-decoration: none; color: #333;">Events</a></li>
+            <li><a href="#venues" style="text-decoration: none; color: #333;">Venues</a></li>
+            <li><a href="#services" style="text-decoration: none; color: #333;">Services</a></li>
+            <li><a href="#contact" style="text-decoration: none; color: #333;">Contact</a></li>
+            <li><a href="{{ url_for('login') }}" style="text-decoration: none; color: #333;">Login</a></li>
+        </ul>
+    </nav>
+
+    <!-- Centered title -->
+    <h1 style="flex: 1; text-align: center; font-size: 24px; font-family: 'Roboto', sans-serif; color: #333; font-weight: bold; margin: 0;">
+        SpotMyShow
+    </h1>
+</header>
+
+
+<section class="slider" id="slider">
+    <div class="slider">
+        <img src="static/images/event3.jpg" alt="Slide 1">
+        <img src="static/images/event2.jpg" alt="Slide 2">
+        <img src="static/images/hero.jpg" alt="Slide 3">
+        <img src="static/images/event4.jpg" alt="Slide 4">
+        <img src="static/images/event5.jpg" alt="Slide 5">
+        <img src="static/images/event1.jpg" alt="Slide 6">
+    </div>
+    <div class="slider-overlay-1">
+        <h1>Discover and book the best events and venues</h1>
+        <p id="quote" style="margin-top: 20px; font-size: 20px; color: #444; font-family: 'Arial', sans-serif; font-weight: bold; text-align: center; letter-spacing: 1px; line-height: 1.5; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);">"The best way to predict the future is to create it." - Abraham Lincoln</p>
+    </div>
+    <div class="slider-nav">
+        <button class="active"></button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button>
+        <button></button>
+    </div>
+</section>
+
+
+
+<section id="events">
+    <h2 class="section-title">Recommended Events</h2>
+    <div class="card-container">
+        <div class="card">
+            <img src="static\images\p1.jpg" alt="Event 1">
+            <div class="card-content">
+                <h3 class="card-title">Music Concert</h3>
+                <p class="card-text">Date: 25th Dec 2024</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Now</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="static\images\p2.jpg" alt="Event 2">
+            <div class="card-content">
+                <h3 class="card-title">Tech Conference</h3>
+                <p class="card-text">Date: 5th Jan 2025</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Now</button>
+
+
+            </div>
+        </div>
+        <div class="card">
+            <img src="static\images\p3.jpg" alt="Event 3">
+            <div class="card-content">
+                <h3 class="card-title">Art Workshop</h3>
+                <p class="card-text">Date: 10th Jan 2025</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Now</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="venues">
+    <h2 class="section-title">Popular Venues</h2>
+    <div class="card-container">
+        <div class="card">
+            <img src="static\images\v1.jpg" alt="Venue 1">
+            <div class="card-content">
+                <h3 class="card-title">Grand Hall</h3>
+                <p class="card-text">Location: Downtown</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Venue</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="static\images\v2.jpg" alt="Venue 2">
+            <div class="card-content">
+                <h3 class="card-title">Rooftop Space</h3>
+                <p class="card-text">Location: City Center</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Venue</button>
+            </div>
+        </div>
+        <div class="card">
+            <img src="static\images\v3.jpg" alt="Venue 3">
+            <div class="card-content">
+                <h3 class="card-title">Open Garden</h3>
+                <p class="card-text">Location: Suburbs</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">Book Venue</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="services">
+    <h2 class="section-title">Services Provided</h2>
+    <div class="card-container">
+        <div class="card">
+            <img src="static\images\a1.jpg" alt="Service 1">
+            <div class="card-content">
+                <h3 class="card-title">Event Planning</h3>
+                <p class="card-text">Our experts assist in organizing every detail of your event.</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">More Info</button>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="static\images\a2.jpg" alt="Service 3">
+            <div class="card-content">
+                <h3 class="card-title">Event Management</h3>
+                <p class="card-text">Full-scale event management services for seamless execution.</p>
+                <button onclick="window.location.href='{{url_for('login')}}'">More Info</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact">
+    <h2 class="section-title">Contact Us</h2>
+    <div class="contact-details">
+        <p>If you have any questions or need assistance, feel free to reach out to us. We're here to help!</p>
+        <ul>
+            <li><strong>Email:</strong> <a href="mailto:support@eventportal.com">support@eventportal.com</a></li>
+            <li><strong>Phone:</strong> 9900133645</li>
+            <li><strong>Location:</strong> ForeverYoung Events, Banglore, Karnataka</li>
+        </ul>
+    </div>
+    <div class="contact-form">
+        <h3>Send us a message</h3>
+        <form action="/" method="post">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" required>
+
+            <label for="email">Your Email</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="message">Your Message</label>
+            <textarea id="message" name="message" required></textarea>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+</section>
+
+<footer>
+    <p>&copy; 2025 Event Portal. All rights reserved.</p>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const slides = document.querySelectorAll('.slider img');
+        const navButtons = document.querySelectorAll('.slider-nav button');
+        let currentIndex = 0;
+
+        function showSlide(index) {
+            slides.forEach((slide, i) => {
+                slide.classList.remove('active');
+                navButtons[i].classList.remove('active');
+                if (i === index) {
+                    slide.classList.add('active');
+                    navButtons[i].classList.add('active');
+                }
+            });
+        }
+
+        function nextSlide() {
+            currentIndex = (currentIndex + 1) % slides.length;
+            showSlide(currentIndex);
+        }
+
+        navButtons.forEach((button, index) => {
+            button.addEventListener('click', () => {
+                currentIndex = index;
+                showSlide(currentIndex);
+            });
+        });
+
+        setInterval(nextSlide, 5000);
+        showSlide(currentIndex);
+    });
+</script>
+</body>
+</html>

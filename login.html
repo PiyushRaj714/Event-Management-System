@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        /* Apply lightest pastel gradient background */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #f3f4f6, #eaf7ff); /* Lightest pastel gradient */
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: row; /* Ensures horizontal layout */
+            align-items: center;
+            justify-content: flex-start; /* Keeps items aligned left */
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            width: 800px;
+            max-width: 90%;
+        }
+
+        .illustration {
+            flex: 1;
+            background: #d4f3e5; /* Pastel green background for the illustration */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+        }
+
+        .illustration img {
+            max-width: 80%; /* Adjust the image size */
+            height: auto;
+        }
+
+        .form-section {
+            flex: 1.5; /* Makes the form wider */
+            padding: 40px;
+            text-align: left; /* Left-align form content */
+        }
+
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        form {
+            text-align: left;
+        }
+
+        /* Flexbox layout for the input fields */
+        .input-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        label {
+            font-size: 14px;
+            color: #555;
+            margin-right: 10px; /* Space between label and input */
+            display: block;
+            width: 120px; /* Set width of labels */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: calc(100% - 130px); /* Adjust input width based on label width */
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            background-color: #4caf50; /* Green button */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        p a {
+            color: #4caf50;
+            text-decoration: none;
+        }
+
+        p a:hover {
+            text-decoration: underline;
+        }
+
+        /* Error Message Styling */
+        .error-message {
+            color: #e74c3c; /* Red color for error messages */
+            font-size: 14px;
+            margin-top: 5px;
+            display: none; /* Hidden by default */
+            text-align: left;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Illustration Section -->
+        <div class="illustration">
+            <img src="static/images/person.jpg" alt="Person Image">
+        </div>
+
+        <!-- Form Section -->
+        <div class="form-section">
+            <h2><a href="{{url_for('index')}}">Welcome</a></h2>
+            <form id="loginForm" action="/login" method="POST">
+                <div class="input-container">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username">
+                </div>
+                <div id="usernameError" class="error-message"></div>
+
+                <div class="input-container">
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password">
+                </div>
+                <div id="passwordError" class="error-message"></div>
+
+                <input type="submit" value="Login">
+            </form>
+
+            <p>Don't have an account? <a href="/signup">Sign up here</a></p>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+
+            // Clear previous errors
+            const usernameError = document.getElementById('usernameError');
+            const passwordError = document.getElementById('passwordError');
+            usernameError.style.display = 'none';
+            passwordError.style.display = 'none';
+
+            // Get input values
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let isValid = true;
+
+            // Username validation
+            if (username === '') {
+                usernameError.textContent = 'Username cannot be empty.';
+                usernameError.style.display = 'block';
+                isValid = false;
+            } else if (!isNaN(username)) {
+                usernameError.textContent = 'Username cannot be a number.';
+                usernameError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Password validation
+            if (password.length <= 4) {
+                passwordError.textContent = 'Password must be more than 4 characters.';
+                passwordError.style.display = 'block';
+                isValid = false;
+            }
+
+            // Submit form if valid
+            if (isValid) {
+                alert('Login successful!'); // Replace with actual login logic
+                this.submit();
+            }
+        });
+    </script>
+
+</body>
+</html>

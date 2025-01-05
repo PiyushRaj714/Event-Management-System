@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Set Appointment</title>
+    <style>
+    /* Body Styling */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #fff; /* White background for a clean look */
+    color: #333;
+    margin: 0;
+    padding: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Heading Styling */
+h2 {
+    font-size: 36px;
+    color: #FFB6C1; /* Light pink color */
+    text-align: center;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-weight: 600;
+    text-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Form Container */
+form {
+    max-width: 700px; /* Increased width */
+    width: 100%;
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    box-sizing: border-box;
+}
+
+/* Input and Textarea Styling */
+input, textarea {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #FFB6C1; /* Light pink border */
+    background-color: #fff;
+    color: #333;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+textarea {
+    resize: none;
+    min-height: 120px;
+}
+
+input:focus, textarea:focus {
+    outline: none;
+    border-color: #FF69B4; /* Brighter pink on focus */
+    box-shadow: 0 0 8px rgba(255, 105, 180, 0.5);
+}
+
+/* Button Styling */
+button {
+    padding: 14px;
+    background-color: #FFB6C1; /* Light pink background */
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+    text-transform: uppercase;
+}
+
+button:hover {
+    background-color: #FF69B4; /* Brighter pink on hover */
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.4);
+}
+
+button:active {
+    transform: translateY(0);
+    box-shadow: none;
+}
+
+/* Label Styling */
+label {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Ensure all form elements take full width */
+form > * {
+    display: block;
+    width: 100%;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    body {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 28px;
+    }
+
+    form {
+        padding: 20px;
+    }
+
+    button {
+        font-size: 16px;
+    }
+}
+
+    </style>
+</head>
+<body>
+
+<h2>Set Appointment</h2>
+<form id="appointmentForm" action="{{ url_for('send_email') }}" method="POST">
+<label for="user_email">User Email:</label>
+    <input type="email" id="user_email" name="user_email" value="{{ user_email }}" required>
+
+    <label for="subject">Subject:</label>
+    <input type="text" id="subject" name="subject" required>
+
+    <label for="body">Body:</label>
+    <textarea id="body" name="body" required></textarea>
+
+    <label for="send_date">Date:</label>
+    <input type="date" id="send_date" name="send_date" required>
+
+    <label for="send_time">Time:</label>
+    <input type="time" id="send_time" name="send_time" required>
+
+    <button type="submit">Send Appointment</button>
+</form>
+
+<script>
+    document.getElementById("appointmentForm").addEventListener("submit", function(event) {
+        // Email validation
+        const email = document.getElementById("user_email").value;
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!email.match(emailPattern)) {
+            alert("Please enter a valid email address.");
+            event.preventDefault();
+            return;
+        }
+
+        // Subject validation
+        const subject = document.getElementById("subject").value;
+        if (subject.trim() === "") {
+            alert("Subject cannot be empty.");
+            event.preventDefault();
+            return;
+        }
+
+        // Body validation
+        const body = document.getElementById("body").value;
+        if (body.trim() === "") {
+            alert("Body cannot be empty.");
+            event.preventDefault();
+            return;
+        }
+
+        // Date and Time validation
+        const date = document.getElementById("send_date").value;
+        const time = document.getElementById("send_time").value;
+        if (!date || !time) {
+            alert("Please select both a date and time.");
+            event.preventDefault();
+            return;
+        }
+    });
+</script>
+
+</body>
+</html>

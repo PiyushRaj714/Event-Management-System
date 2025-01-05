@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>/* Import Google Fonts */
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&family=Montserrat:wght@400;600&display=swap');
+
+   /* Notification Bell Button */
+    .notification-bell {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        font-size: 30px;
+        color: #555;
+        cursor: pointer;
+        z-index: 10;
+        transition: color 0.3s ease;
+    }
+
+    .notification-bell:hover {
+        color: #3498db; /* Accent blue color on hover */
+    }
+
+    /* Notification Dropdown */
+    .notification-dropdown {
+        position: fixed;
+        top: 60px;
+        right: 20px;
+        background-color: #fff;
+        color: #333;
+        width: 280px;
+        max-height: 400px;
+        overflow-y: auto;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        display: none;
+        padding: 15px;
+        transition: all 0.3s ease;
+    }
+
+    .notification-dropdown ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .notification-dropdown li {
+        margin-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+
+    .notification-dropdown li a {
+        color: #3498db;
+        text-decoration: none;
+        font-weight: 500;
+    }
+
+.notification-dropdown li a:hover {
+    text-decoration: underline; /* Underline on hover for better feedback */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .notification-bell {
+        font-size: 28px;
+        top: 15px;
+        right: 15px;
+    }
+
+    .notification-dropdown {
+        width: 90%; /* Full width on smaller screens */
+        right: 5%;
+    }
+}
+
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to right, #f7f9fc, #e0efff); /* Light pastel gradient */
+    color: #555;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+/* Header Styling */
+.header {
+    background: linear-gradient(135deg, #a0d8ff, #e0efff); /* Light blue gradient */
+    color: #333;
+    padding: 40px;
+    text-align: center;
+    border-bottom: 3px solid #ffb8d0; /* Soft pink border */
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    font-family: 'Dancing Script', cursive; /* Elegant script font */
+    font-weight: 600;
+    color: #333;
+}
+
+.header p {
+    font-size: 1.2rem;
+    margin-top: 10px;
+    font-weight: 300;
+    color: #777;
+}
+
+/* Dashboard Container */
+.dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+/* Card Styling */
+.card {
+    width: 320px;
+    background: #fff; /* Pure white */
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    padding: 30px;
+    transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #a0d8ff, #e0efff); /* Light blue gradient */
+}
+
+.card h2 {
+    font-size: 1.8rem;
+    color: #ff7bc4; /* Soft pinkish color */
+    margin-bottom: 15px;
+    font-weight: 600;
+    font-family: 'Dancing Script', cursive; /* Elegant script font for headings */
+}
+
+.card p {
+    font-size: 1.1rem;
+    color: #777;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+.card a {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #ffb8d0; /* Soft pink */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: background-color 0.3s ease;
+}
+
+.card a:hover {
+    background-color: #ff7bc4; /* Darker pink */
+}
+
+/* Footer Styling */
+.footer {
+    text-align: center;
+    padding: 20px;
+    background-color: #f0f4f8; /* Light greyish background */
+    color: #555;
+    margin-top: 50px;
+    font-size: 1rem;
+    font-weight: 300;
+}
+
+.footer p {
+    margin: 0;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .dashboard {
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .card {
+        width: 90%;
+    }
+}
+
+/* Back Button Styling */
+.back-btn {
+    display: inline-block;
+    background-color: #e74c3c; /* Red color for logout */
+    color: white;
+    padding: 12px 25px;
+    border-radius: 5px;
+    font-size: 16px;
+    text-decoration: none;
+    font-weight: 600;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add depth with shadow */
+}
+
+/* Hover Effect for Back Button */
+.back-btn:hover {
+    background-color: #c0392b; /* Darker red on hover */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Increase shadow for hover effect */
+    transform: translateY(-3px); /* Slight lift effect */
+}
+
+/* Active Effect */
+.back-btn:active {
+    background-color: #a93226; /* Even darker red when clicked */
+    transform: translateY(0); /* Reset to normal position */
+}
+
+/* Centering the Button */
+.center-button-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Compact vertical spacing */
+}
+
+
+</style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>EVENT MANAGEMENT SYSTEM</h1>
+        <p>Manage your events </p>
+
+    </div>
+
+
+    <div class="dashboard">
+
+        <div class="card">
+            <h2>Book Events</h2>
+            <p>Browse and register for upcoming events </p>
+            <a href="{{ url_for('home') }}">Go to Events</a>
+        </div>
+
+
+        <div class="card">
+            <h2>My Events</h2>
+            <p>View the events you have registered for</p>
+            <a href="{{url_for('view_registered_events')}}">View Details</a>
+        </div>
+
+         <div class="card">
+            <h2>Book Venues</h2>
+            <p>Browse and register venues</p>
+            <a href="{{url_for('list_venues')}}">View Details</a>
+        </div>
+
+    </div>
+
+<div class="center-button-container">
+    <a href="{{ url_for('login') }}" class="back-btn">Logout</a>
+</div>
+ <!-- Notification Bell Button -->
+    <div class="notification-bell" onclick="toggleNotifications()">🔔</div>
+
+    <!-- Notification Dropdown -->
+    <div class="notification-dropdown" id="notificationDropdown">
+        <ul>
+            {% for notification in notifications %}
+                <li class="notification-item">
+                    <div class="notification-box">
+                        <a href="#">{{ notification[0] }} - {{ notification[1] }}</a>
+                    </div>
+                </li>
+            {% else %}
+                <li>No new notifications</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <script>
+        // Toggle notification dropdown visibility
+        function toggleNotifications() {
+            var notificationDropdown = document.getElementById('notificationDropdown');
+            notificationDropdown.style.display = (notificationDropdown.style.display === 'none' || notificationDropdown.style.display === '') ? 'block' : 'none';
+        }
+    </script>
+
+    <div class="footer">
+        <p>&copy; 2024 Event Management System. All Rights Reserved.</p>
+    </div>
+</body>
+</html>

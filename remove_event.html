@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Remove Event</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f9;
+            text-align: center;
+            padding-top: 50px;
+        }
+        h2 {
+            color: #f14e7e;
+        }
+        .buttons a {
+            background-color: #f14e7e;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            margin: 10px;
+        }
+        .buttons a:hover {
+            background-color: #e23a6c;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Are you sure you want to remove the event?</h2>
+
+<div>
+    <p><strong>Event Name:</strong> {{ event['name'] }}</p>
+    <p><strong>Date:</strong> {{ event['date'] }}</p>
+    <p><strong>Venue:</strong> {{ event['venue'] }}</p>
+    <p><strong>Price:</strong> {{ event['price'] }}</p>
+</div>
+
+<div class="buttons">
+    <!-- Pass event_id dynamically to the URL -->
+    <form action="{{ url_for('remove_event', event_id=event['id']) }}" method="POST">
+        <button type="submit">Yes, Delete Event</button>
+    </form>
+    <a href="{{ url_for('admin_dashboard') }}">Cancel</a>
+</div>
+
+</body>
+</html>

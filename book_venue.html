@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book Meeting with Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(to bottom, #fef9ff, #d4efff);
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+        }
+        .container {
+            max-width: 600px;
+            background: #fff;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            padding: 30px;
+            border-radius: 20px;
+            margin: 50px auto;
+        }
+        .section-title {
+            font-size: 2.2rem;
+            color: #ff79cd;
+            font-weight: bold;
+            text-shadow: 1px 1px #ffe1f0;
+        }
+        label {
+            color: #ff79cd;
+            font-weight: bold;
+        }
+        .form-control {
+            border: 2px solid #ffd1e8;
+            border-radius: 12px;
+            background: #fff9fe;
+        }
+        .form-control:focus {
+            border-color: #ff79cd;
+            box-shadow: 0 0 8px rgba(255, 121, 205, 0.6);
+        }
+        button {
+            background-color: #ff79cd;
+            color: white;
+            font-weight: bold;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #ff47b2;
+            transform: translateY(-3px);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        textarea {
+            resize: none;
+        }
+        .meeting-details p {
+            color: #b574ab;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+    .back-btn {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #ff79cd;
+        color: white;
+        text-decoration: none;
+        border-radius: 10px;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+    .back-btn:hover {
+        background-color: #ff47b2;
+    }
+
+
+    </style>
+</head>
+<body>
+
+<section id="meeting-booking" class="container text-center">
+
+    <h2 class="section-title mb-4">Book a Meeting with Admin</h2>
+    <div class="meeting-details mb-4">
+        <p>If you need to discuss anything or book an appointment with the admin, fill out the form below.</p>
+    </div>
+    <form action="/book_meeting" method="post">
+        <div class="mb-3">
+            <label for="name" class="form-label">Your Name</label>
+            <input type="text" id="name" name="name" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="email" class="form-label">Your Email</label>
+            <input type="email" id="email" name="email" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="meeting_date" class="form-label">Preferred Meeting Date</label>
+            <input type="date" id="meeting_date" name="meeting_date" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="start_time" class="form-label">Preferred Start Time</label>
+            <input type="time" id="start_time" name="start_time" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="end_time" class="form-label">Preferred End Time</label>
+            <input type="time" id="end_time" name="end_time" class="form-control" required>
+        </div>
+        <div class="mb-3">
+            <label for="comments" class="form-label">Comments or Notes</label>
+            <textarea id="comments" name="comments" class="form-control" rows="4"></textarea>
+        </div>
+        <button type="submit">Book Meeting</button>
+    </form>
+
+</section>
+<a href="{{url_for('user_dashboard')}}" class="back-btn">back</a>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

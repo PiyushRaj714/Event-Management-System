@@ -19,6 +19,7 @@ Welcome to **Event Garden**, a 🌐 web-based event management system built usin
   - 📝 Register Event
   - 🖼️ Gallery
   - 📞 Contact
+  - 🔔 Notification
 
 ### 👩‍💼 Admin Features
 - **🔧 Admin Dashboard:**
